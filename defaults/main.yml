@@ -1,2 +1,4 @@
 ---
-# defaults file for role-lamp
+document_root: /var/www/html
+server_admin: "email"
+sites_enabled: "/etc/apache2/sites-enabled"

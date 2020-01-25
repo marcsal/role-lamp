@@ -1,0 +1,54 @@
+---
+- name: Install apt-utils and software-properties-common
+  apt: 
+    name:
+      - apt-utils
+      - software-properties-common
+    state: present 
+    update_cache: yes
+
+- name: Install packages
+  apt: 
+    name:
+      - apache2
+      - apache2-bin
+      - apache2-data
+      - apache2-utils
+      - libapache2-mod-php7.0
+      - mysql-server
+      - php7.0
+      - php7.0-mcrypt
+      - php7.0-mysql
+      - php7.0-cli
+
+- name: custom content
+  block:
+
+    - name: Copy customized files
+      copy:
+        src: ../files/
+        dest: /var/www/html
+        owner: www-data
+        group: www-data
+
+    - name: Copy virtual host
+      template:
+        src: vhost.cfg.j2
+        dest: /etc/apache2/sites-enabled/000-default.conf
+        owner: www-data
+        group: www-data
+
+    - name: Copy index.html
+      template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+      notify: Start Service
+
+    handlers:
+      - name: Start Service
+        service:
+          state: started
+          name: apache2 
+          enabled: yes

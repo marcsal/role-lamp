@@ -1,2 +1,3 @@
 ---
-# tasks file for role-lamp
+- name: Include para distro Linux
+  include: "{{ ansible_os_family }}.yml"
